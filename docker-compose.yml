@@ -13,6 +13,18 @@ services:
     environment:
       PORT: 9090
 
+  dq-details:
+    build:
+      context: "../DirectoryEnquiriesDetails"
+      dockerfile: "dist/docker/Dockerfile"
+    image: "roger/dq-details:latest"
+    expose:
+      - 9091
+    ports:
+      - 9091:9091
+    environment:
+      PORT: 9091
+
   gateway:
     build:
       context: "."
@@ -22,11 +34,12 @@ services:
       - "service"
     links:
       - "service:service"
+      - "dq-details:dq-details"
     ports:
       - 4000:4000
     command: sh -c "/wait && node server.js"
     environment:
-      - WAIT_HOSTS=service:9090
+      - WAIT_HOSTS=service:9090,dq-details:9091
       - WAIT_HOSTS_TIMEOUT=300
       - WAIT_SLEEP_INTERVAL=5
       - WAIT_HOST_CONNECT_TIMEOUT=30
