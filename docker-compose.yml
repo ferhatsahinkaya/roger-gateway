@@ -3,7 +3,7 @@ services:
 
   service:
     build:
-      context: "../service"
+      context: "../roger-service"
       dockerfile: "dist/docker/Dockerfile"
     image: "roger/service:latest"
     expose:
@@ -15,7 +15,7 @@ services:
 
   dq-details:
     build:
-      context: "../DirectoryEnquiriesDetails"
+      context: "../roger-dq-details"
       dockerfile: "dist/docker/Dockerfile"
     image: "roger/dq-details:latest"
     expose:
@@ -27,7 +27,7 @@ services:
 
   operator:
     build:
-      context: "../operator"
+      context: "../roger-operator"
       dockerfile: "dist/docker/Dockerfile"
     image: "roger/operator:latest"
     expose:
