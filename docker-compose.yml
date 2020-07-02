@@ -25,6 +25,18 @@ services:
     environment:
       PORT: 9091
 
+  operator:
+    build:
+      context: "../operator"
+      dockerfile: "dist/docker/Dockerfile"
+    image: "roger/operator:latest"
+    expose:
+      - 9092
+    ports:
+      - 9092:9092
+    environment:
+      PORT: 9092
+
   gateway:
     build:
       context: "."
@@ -35,11 +47,12 @@ services:
     links:
       - "service:service"
       - "dq-details:dq-details"
+      - "operator:operator"
     ports:
       - 4000:4000
     command: sh -c "/wait && node server.js"
     environment:
-      - WAIT_HOSTS=service:9090,dq-details:9091
+      - WAIT_HOSTS=service:9090,dq-details:9091,operator:9092
       - WAIT_HOSTS_TIMEOUT=300
       - WAIT_SLEEP_INTERVAL=5
       - WAIT_HOST_CONNECT_TIMEOUT=30
