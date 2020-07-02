@@ -1,0 +1,32 @@
+version: '3'
+services:
+
+  service:
+    build:
+      context: "../service"
+      dockerfile: "dist/docker/Dockerfile"
+    image: "roger/service:latest"
+    expose:
+      - 9090
+    ports:
+      - 9090:9090
+    environment:
+      PORT: 9090
+
+  gateway:
+    build:
+      context: "."
+      dockerfile: "dist/docker/Dockerfile"
+    image: "roger/gateway:latest"
+    depends_on:
+      - "service"
+    links:
+      - "service:service"
+    ports:
+      - 4000:4000
+    command: sh -c "/wait && node server.js"
+    environment:
+      - WAIT_HOSTS=service:9090
+      - WAIT_HOSTS_TIMEOUT=300
+      - WAIT_SLEEP_INTERVAL=5
+      - WAIT_HOST_CONNECT_TIMEOUT=30
