@@ -3,7 +3,7 @@ const { ApolloGateway } = require('@apollo/gateway');
 
 const gateway = new ApolloGateway({
   serviceList: [
-    { name: 'service', url: 'http://localhost:9090/graphql' },
+    { name: 'service', url: 'http://service:9090/graphql' },
   ],
 });
 
